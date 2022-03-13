@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import FeedbackOptions from './FeedbackOptions';
 import Section from './Section';
 import Statistics from './Statistics';
@@ -15,6 +15,8 @@ function FeedbackStats(props) {
   const [good, addGood] = useState(0);
   const [neutral, addNeutral] = useState(0);
   const [bad, addBad] = useState(0);
+  const [total, countTotal] = useState(0);
+  const [positive, countPositive] = useState(0);
 
   const handleClick = label => {
     label === 'Good' && addGood(good + 1);
@@ -22,17 +24,10 @@ function FeedbackStats(props) {
     label === 'Bad' && addBad(bad + 1);
   };
 
-  const countTotalFeedback = () => {
-    return good + neutral + bad;
-  };
-
-  const countPositiveFeedbackPercentage = () => {
-    let total = countTotalFeedback();
-    return (good * 100) / total;
-  };
-
-  let total = countTotalFeedback();
-  let positive = countPositiveFeedbackPercentage();
+  useEffect(() => {
+    countTotal(good + neutral + bad);
+    countPositive((good * 100) / total);
+  });
 
   return total === 0 ? (
     <div>
